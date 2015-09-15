@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.anykey.balala.activity.SendDynamicActivity">
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:gravity="top"
+        android:layout_margin="5dip"
+        android:hint="此时此地，想和大家说什么"
+        android:inputType="textMultiLine"
+        android:textSize="16dp" />
+
+    <net.dev.mylib.view.ImageView.RemoteImageView
+        android:id="@+id/img"
+        android:layout_width="160dip"
+        android:layout_height="160dip"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/et_content"
+        android:layout_marginLeft="10dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pictures_no" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/et_content"
+        android:layout_alignTop="@+id/img"
+        android:text="添加吧" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/button2"
+        android:layout_below="@+id/button2"
+        android:text="添加表情" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img"
+        android:id="@+id/et_address"
+        android:text="浙江省杭州市"
+        />
+
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="send" />
+
+
+
+</RelativeLayout>

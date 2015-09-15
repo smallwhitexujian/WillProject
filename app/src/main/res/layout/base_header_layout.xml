@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.anykey.balala.view.HeaderLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/headerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:background="#4d3e5d"
+    android:orientation="vertical" />
+

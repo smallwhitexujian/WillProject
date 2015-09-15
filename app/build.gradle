@@ -1,0 +1,32 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion '23.0.0'
+
+    defaultConfig {
+        applicationId "com.anykey.balala"
+        minSdkVersion 17
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile project(':facebook')
+    compile project(':utility_Lib')
+    compile files('libs/Bughd_android_sdk_v1.3.3.jar')
+    compile files('libs/bugsnag-android-3.2.6.jar')
+    compile files('libs/activeandroid-3.1-beta.jar')
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:support-v13:23.0.1'
+}

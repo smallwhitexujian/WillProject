@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/chatline"
+        android:scrollbars="none"/>
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#e4e4e4" />
+
+        <LinearLayout
+            android:id="@+id/chatoffline"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:background="#fafafa"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+
+            <EditText
+                android:id="@+id/sendOfflineMsg_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginBottom="7dip"
+                android:layout_marginLeft="9dip"
+                android:layout_marginRight="9dp"
+                android:layout_marginTop="7dip"
+                android:layout_weight="1"
+                android:background="@drawable/search_offline_bg"
+                android:ems="10"
+                android:hint="请输入聊天信息"
+                android:paddingLeft="8dip"
+                android:singleLine="true"
+                android:textSize="18dp" >
+            </EditText>
+
+            <ImageView
+                android:id="@+id/faceView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dip"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="3dip"
+                android:contentDescription="@null"
+                android:src="@drawable/room_faceicon" />
+
+            <Button
+                android:id="@+id/sendBtn"
+                android:layout_width="44dp"
+                android:layout_height="34dp"
+                android:layout_marginBottom="7dip"
+                android:layout_marginRight="4dip"
+                android:layout_marginTop="7dip"
+                android:background="@drawable/room_send"
+                android:text="发送"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/npc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dip"
+                android:layout_marginRight="15dip"
+                android:layout_marginTop="3dip"
+                android:contentDescription="@null"
+                android:src="@drawable/room_npc"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#e4e4e4" />
+        <!-- 表情框 -->
+    </LinearLayout>
+</LinearLayout>

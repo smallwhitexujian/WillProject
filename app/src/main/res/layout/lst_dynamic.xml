@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <net.dev.mylib.view.ImageView.RemoteImageView
+        android:id="@+id/img_head"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_below="@+id/btn_logout"
+        android:layout_weight="1"
+        android:scaleType="fitXY"
+        android:src="@drawable/pictures_no" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dip"
+        android:layout_toRightOf="@+id/img_head"
+        android:singleLine="true"
+        android:text="红色钱包"
+        android:textColor="#444444"
+        android:textSize="16sp"></TextView>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginLeft="6dip"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/img_head"
+
+        android:text="20130240122"
+        android:textColor="#898989"
+        android:textSize="14sp"></TextView>
+
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/tv_time"
+        android:singleLine="true"
+        android:textColor="#898989"
+        android:text="jdfkadsjfkdsjk"
+
+        android:textSize="14sp"></TextView>
+
+    <net.dev.mylib.view.ImageView.RemoteImageView
+        android:id="@+id/img_body"
+        android:layout_width="fill_parent"
+        android:layout_height="300dip"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/img_head"
+        android:layout_marginTop="10dip"
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+
+
+        android:src="@drawable/pictures_no" />
+
+    <TextView
+        android:id="@+id/tv_describe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img_body"
+
+        android:layout_marginTop="2dp"
+        android:singleLine="true"
+        android:text="周三早上丢失了红色钱包，在食堂二楼"
+        android:textColor="#898989"
+        android:textSize="14sp"></TextView>
+</RelativeLayout>
