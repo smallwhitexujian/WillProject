@@ -1,26 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Bar View"
-        android:id="@+id/textView"
-        android:layout_gravity="center_vertical" />
-    <Button
-        android:id="@+id/shareButton"
+    <include layout="@layout/base_header_layout" />
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:text="@string/com_facebook_share_button_text"/>
-    <Button
-        android:id="@+id/sendMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:text="sendMessage"/>
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/category_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="40.0dip">
+
+            <ImageView
+                android:id="@+id/icon_category"
+                android:layout_width="40.0dip"
+                android:layout_height="40.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name"
+                android:scaleType="center"
+                android:src="@drawable/ic_category_expand" />
+
+            <LinearLayout
+                android:id="@+id/titleBar"
+                android:layout_width="wrap_content"
+                android:layout_height="40.0dip"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/icon_category">
+
+                <com.anykey.balala.Utils.CategoryTabStrip
+                    android:id="@+id/category_strip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40.0dp"
+                    android:clipToPadding="false"
+                    android:paddingLeft="6.0dip"
+                    android:paddingRight="6.0dip" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#b1b2b3" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/category_layout" />
+
+        <LinearLayout
+            android:id="@+id/layout_isOnHook"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/bar_bottom_hang"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <net.dev.mylib.view.ImageView.CircularImage
+                android:id="@+id/head_isOnHook"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="14dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/icon_micro" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/barName_isOnHook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bar name"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/synopsis_isOnHook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="this is very funny bar"
+                    android:textColor="@color/font_grey"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textSize="10dp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/Attention_isOnHook"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:paddingRight="10dp"
+                android:visibility="gone"
+                android:src="@drawable/bar_is" />
+
+            <ImageView
+                android:id="@+id/Share_isOnHook"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:paddingRight="10dp"
+                android:layout_gravity="center"
+                android:src="@anim/online_show_1"/>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="5dp"
+                android:background="#f3f3f3" />
+
+            <ImageView
+                android:id="@+id/exit_isOnHook"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginRight="14dp"
+                android:src="@drawable/bar_bottom_shut_down" />
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

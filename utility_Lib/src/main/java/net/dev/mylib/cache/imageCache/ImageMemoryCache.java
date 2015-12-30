@@ -9,13 +9,15 @@ import android.support.v4.util.LruCache;
 
 public class ImageMemoryCache {
   
-    private static final int SOFT_CACHE_SIZE = 15;
+    private static final int SOFT_CACHE_SIZE = 8;
     private static LruCache<String, Bitmap> mLruCache;
     private static LinkedHashMap<String, SoftReference<Bitmap>> mSoftCache; 
                                                                                           
-    public ImageMemoryCache(Context context) {
-        int memClass = ((ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
-        int cacheSize = 1024 * 1024 * memClass / 4;
+    public ImageMemoryCache() {
+        //int memClass = ((ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+        //int cacheSize = 1024 * 1024 * memClass / 2;
+        int maxMemory = (int) Runtime.getRuntime().maxMemory();
+        int cacheSize=maxMemory/8;
         mLruCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
@@ -49,9 +51,8 @@ public class ImageMemoryCache {
         synchronized (mLruCache) {
             bitmap = mLruCache.get(url);
             if (bitmap != null) {
-
-                mLruCache.remove(url);
-                mLruCache.put(url, bitmap);
+//                mLruCache.remove(url);
+//                mLruCache.put(url, bitmap);
                 return bitmap;
             }
         }
@@ -70,7 +71,6 @@ public class ImageMemoryCache {
         }
         return null;
     } 
-
 
     public void addBitmapToCache(String url, Bitmap bitmap) {
         if (bitmap != null) {

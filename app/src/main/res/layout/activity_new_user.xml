@@ -1,64 +1,118 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.anykey.balala.activity.NewUserActivity">
+    android:background="@color/light_gray_2"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_header_layout" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/radioButton"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Register with mobile" />
-        <Spinner
-            android:id="@+id/spinner"
+            android:layout_margin="10dp"
+            android:src="@drawable/bound_phone_left_mobile_phone_unmber" />
+
+        <EditText
+            android:id="@+id/et_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/spingarr" />
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:ems="10"
+            android:hint="@string/country_code"
+            android:maxLength="18"
+            android:inputType="phone"
+            android:textSize="18dp" />
+
+        <Button
+            android:id="@+id/btn_getcode"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:background="@drawable/task_right_button"
+            android:gravity="center"
+            android:text="@string/button_send"
+            android:textColor="@color/btn_bg_red"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/font_line" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <EditText
-                android:id="@+id/et_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="phone"
-                android:hint="@string/phone_register_enter_your_phone"
-               />
-            <Button
-                android:id="@+id/btn_getcode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:text="@string/phone_register_click_for_code"/>
-        </LinearLayout>
+            android:layout_margin="10dp"
+            android:src="@drawable/bound_phone_left_mobile_phone_verification_code" />
+
         <EditText
             android:id="@+id/et_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/phone_register_enter_the_phone_code"
-            />
+            android:layout_weight="1"
+            android:background="@null"
+            android:maxLength="6"
+            android:hint="@string/verifying_code"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/font_line" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:src="@drawable/change_password_left_old_password" />
+
         <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@null"
             android:ems="10"
-            android:hint="@string/phone_register_setpassword"
-            android:inputType="textPassword" />
-        <Button
-            android:id="@+id/btn_next"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/button_submit" />
+            android:maxLength="24"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:textSize="18dp" />
     </LinearLayout>
-</RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:background="@drawable/red_btn_bg"
+        android:text="@string/button_next"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+</LinearLayout>

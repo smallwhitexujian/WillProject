@@ -2,14 +2,22 @@ package com.anykey.balala.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.dev.mylib.view.ImageView.RemoteImageView;
+import com.anykey.balala.AppBalala;
+import com.anykey.balala.R;
+
+import net.dev.mylib.view.ImageView.CircularImage;
+
+import java.util.concurrent.Future;
 
 /**
  * Created by Shanli_pc on 2015/9/9.
@@ -18,9 +26,10 @@ public class ViewHolder {
     private final SparseArray<View> mViews;
     private int mPosition;
     private View mConvertView;
+    private Future<?> future;
 
-    private ViewHolder(Context context, ViewGroup parent, int layoutId,
-                       int position) {
+    public ViewHolder(Context context, ViewGroup parent, int layoutId,
+                      int position) {
         this.mPosition = position;
         this.mViews = new SparseArray<View>();
         mConvertView = LayoutInflater.from(context).inflate(layoutId, parent,
@@ -73,8 +82,14 @@ public class ViewHolder {
      * @param text
      * @return
      */
-    public ViewHolder setText(int viewId, String text) {
+    public ViewHolder setText(int viewId, CharSequence text) {
         TextView view = getView(viewId);
+        view.setText(text);
+        return this;
+    }
+
+    public ViewHolder setButtonText(int viewId,CharSequence text){
+        Button view = getView(viewId);
         view.setText(text);
         return this;
     }
@@ -112,14 +127,86 @@ public class ViewHolder {
      * @param url
      * @return
      */
-    public ViewHolder setImageByUrl(int viewId, String url) {
-        RemoteImageView img = getView(viewId);
+    public ViewHolder setImageUrl(int viewId,String url){
+        return setImageUrl(viewId,url, R.drawable.icon_micro);
+    }
+
+    public ViewHolder setImageUrl(int viewId,String url,int defaultResId){
+        CircularImage img = getView(viewId);
+        img.setImageResource(defaultResId);
         img.setImageUrl(url);
         return this;
     }
 
+    public void hideView(int viewId){
+        View view = getView(viewId);
+        view.setVisibility(View.GONE);
+    }
+
+    public void showView(int viewId){
+        View view = getView(viewId);
+        view.setVisibility(View.VISIBLE);
+    }
+
+    public void setLayoutParams(int viewId,ViewGroup.LayoutParams lp){
+        View view = getView(viewId);
+        view.setLayoutParams(lp);
+    }
+
+    public void setAlpha(int viewId,float alpha){
+        View view = getView(viewId);
+        view.setAlpha(alpha);
+    }
+
+    public void setBackgroundColor(int viewId,int color){
+        View view = getView(viewId);
+        view.setBackgroundColor(color);
+    }
+
+
+    public void setOnClick(int viewId,View.OnClickListener clickListener){
+        View view = getView(viewId);
+        view.setOnClickListener(clickListener);
+    }
+
+
+    public void setTextColor(int viewId,int color){
+        TextView view = getView(viewId);
+        view.setTextColor(color);
+    }
+
+    public void setBtnListener(int viewId,View.OnClickListener listener){
+        Button btn = getView(viewId);
+        btn.setOnClickListener(listener);
+    }
+
+
     public int getPosition() {
         return mPosition;
     }
+
+
+    public void setImageViewByImageLoader(int viewId,String filePath){
+        final ImageView view = getView(viewId);
+        Bitmap bitmap= AppBalala.imageCache.getCache(filePath);
+        if(bitmap!=null){
+            view.setImageBitmap(bitmap);
+        }else {
+            if(future!=null){
+                future.cancel(true);
+            }
+            future=AppBalala.imageFileLoader.execute(filePath, view.getWidth(), view.getHeight(), new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    if (msg.obj != null) {
+                        Bitmap bitmap = (Bitmap) msg.obj;
+                        view.setImageBitmap(bitmap);
+                    }
+                }
+            });
+        }
+    }
+
+
 
 }

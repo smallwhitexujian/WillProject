@@ -1,11 +1,14 @@
 package net.dev.mylib;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * @author xu.jian
@@ -106,14 +109,16 @@ public class JsonUtil {
 	 * @return
 	 */
 	public static <T> T fromJson(String json, Class<T> claxx) {
-        try {
+		try {
            return new Gson().fromJson(json, claxx);
         } catch (Exception e){
             e.printStackTrace();
         }
         return null;
     }
-	
+
+
+
    	/**
    	 * 支持多层解析 只需要传入对应type
    	 * @param json

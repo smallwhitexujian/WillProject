@@ -1,2 +1,6 @@
-include ':app', ':facebook'
+include ':app', ':google_pay_lib', ':slidelibrary'
 include ':utility_Lib'
+project(':app').projectDir = new File('app')
+project(':google_pay_lib').projectDir = new File('google_pay_lib')
+project(':slidelibrary').projectDir = new File('slidelibrary')
+project(':utility_Lib').projectDir = new File('utility_Lib')

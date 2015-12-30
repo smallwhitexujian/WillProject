@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.anykey.balala" >
+    package="com.anykey.balala">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -20,17 +20,32 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 获取相机权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- google获取GPS权限 -->
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <!-- 通过网络连接获取地址 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- 录音权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 系统弹窗权限-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name=".AppBalala"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+        android:uiOptions="splitActionBarWhenNarrow" >
         <activity
             android:name=".activity.StartActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/StartTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,41 +57,237 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MainActivityDemo"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.LoginActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.NewUserActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:screenOrientation="portrait" />
-        <!-- email注册 -->
-        <activity
-            android:name=".activity.EmailRegister"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <!-- 上传用户头像和语音简介 -->
-        <activity
-            android:name=".activity.UploadInfoActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:screenOrientation="portrait" />
         <!-- 注册填写用户信息 -->
         <activity
             android:name=".activity.ProfileActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ChatRoom"
+            android:name=".activity.ChatRoomActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"/>
-
+            android:allowBackup="true"
+            android:persistent="true"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".activity.PrivateChatActivity"
+            android:configChanges="screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.SendDynamicActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
+            android:name=".activity.DynamicActivity"
+            android:configChanges="keyboard|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
+        <!-- vistors -->
+        <activity
+            android:name=".activity.VistorActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <!-- subscription -->
+        <activity
+            android:name=".activity.SubscriptionsActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BarIndexDetailActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CreateMoneyActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CreateBarActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ReportActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BarMemberActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <!-- task -->
+        <activity
+            android:name=".activity.TaskActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <!-- recharge -->
+        <activity
+            android:name=".activity.RechargeActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- relations -->
+        <activity
+            android:name=".activity.RelationsActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UpgradeBarActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- 登录 -->
+        <activity
+            android:name=".activity.GoLoginActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ActivitiesNoticeActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WebActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyInfoActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UserInfoEditActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SendRedRnvelopesActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.OpenRedRnvelopesActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyRedRnvelopesActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.VoiceintrActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyGiftActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UserInfoActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyDiscoverActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SelectAddressActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SettingActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyAccountActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ChangePasswordActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AboutActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FeedBackActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BoundPhoneActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- find password -->
+        <activity
+            android:name=".activity.PhoneSendCodeActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BarInfoActivity"
+            android:configChanges="keyboard|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
+        <!-- exchange -->
+        <activity
+            android:name=".activity.ExchangeActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <!-- Bill -->
+        <activity
+            android:name=".activity.BillActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SystemAssistantActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity
+            android:name=".activity.ShowImageActivity"
+            android:label="@string/title_activity_show_image"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <!-- 监听开机启动的广播，用于启动后台服务 -->
         <receiver android:name=".receiver.BackgroundReceiver" >
@@ -92,22 +303,27 @@
         <!-- 后台服务 -->
         <service
             android:name=".service.BackgroundService"
+            android:allowBackup="true"
+            android:persistent="true"
             android:enabled="true" >
-            <intent-filter>
+            <intent-filter android:priority="1000" >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </service>
 
-        <!-- bugSnag错误发送 -->
+        <!-- google Maps api -->
         <meta-data
-            android:name="com.bugsnag.android.API_KEY"
-            android:value="e5397e39826ecae9ea423aeb5410d357" />
-        <!-- fir.im代码监控 -->
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCinbeiucBdv96eefXTyqAcd0c-TqdzTZg" />
         <meta-data
-            android:name="BUG_HD_SDK_GENERAL_KEY"
-            android:value="bdd136ee2172a39446044837553b8f5e" />
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!-- 友盟 -->
+        <meta-data android:value="5649c44b67e58eed9d001160" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="Channel ID" android:name="Balala"/>
         <!-- Facebook 相关配置 -->
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -124,8 +340,37 @@
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider1633643760247985"
+            android:authorities="com.facebook.app.FacebookContentProvider1515359222122159"
             android:exported="true" />
+        <!-- Facebook 相关配置 end -->
+        <!--AppsFlyer -->
+        <receiver
+            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.appsflyer.AppsFlyerLib">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="AppsFlyerDevKey"
+            android:value="10a4cb0e-8ce5-4b65-8114-40077157611f" />
+
+        <!-- 渠道
+        <meta-data android:name="CHANNEL" android:value="Amazon" />-->
+        <!-- end  - AppsFlyer -->
+
+        <!-- TalkingData start -->
+        <meta-data android:name="TD_APP_ID" android:value="EA1DB31C84ABF091B3E6B7FE04037F5C" />
+        <meta-data android:name="TD_CHANNEL_ID" android:value="Balala"/>
+        <!-- TalkingData end -->
+
 
         <!-- ActiveAndroid 数据库名称 -->
         <meta-data
@@ -134,13 +379,8 @@
         <!-- ActiveAndroid 数据库版本控制 -->
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="1" />
+            android:value="8" />
         <!-- 配置Model 类，加速启动.分隔符号:, -->
-        <meta-data
-            android:name="AA_MODELS"
-            android:value="com.anykey.balala.model.ExampleDBModel" />
-
-
     </application>
 
 </manifest>

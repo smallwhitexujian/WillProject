@@ -139,7 +139,6 @@ public class ImageLoader {
 	/**
 	 * 加载图片
 	 * 
-
 	 */
 	public Bitmap loadImage(final String path, final int reqWidth,
 			final int reqHeight) {
@@ -208,7 +207,6 @@ public class ImageLoader {
 			addTask(new Runnable() {
 				@Override
 				public void run() {
-
 					ImageSize imageSize = getImageViewWidth(imageView);
 
 					int reqWidth = imageSize.width;

@@ -3,140 +3,161 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false">
-    <FrameLayout
-        android:id="@+id/contentFrame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="49dp">
-    </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/bottomLinear"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:layout_gravity="bottom|center"
-        android:background="#f8f8f8"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <View
+        <FrameLayout
+            android:id="@+id/contentFrame"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#d0d0d0" />
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp" />
 
         <LinearLayout
+            android:id="@+id/bottomLinear"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|center"
             android:background="#f8f8f8"
-            android:clickable="true"
-            android:clipChildren="false"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#d0d0d0" />
 
             <LinearLayout
-                android:id="@+id/tabMessage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:background="#f8f8f8"
+                android:clickable="true"
+                android:clipChildren="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/tabMessage_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:contentDescription="@null"
+                <LinearLayout
+                    android:id="@+id/tabDiscover"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_launcher"/>
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tabMessage_str"
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/tabDiscover_icon"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/discover_icon" />
+
+                    <TextView
+                        android:id="@+id/tabDiscover_str"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tab_discover"
+                        android:textSize="10dp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/tabBar"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_message"
-                    android:textColor="#b1b1b1"
-                    android:textSize="10dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tabBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/tabBar_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:contentDescription="@null"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_launcher"/>
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tabBar_str"
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/tabBar_icon"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:contentDescription="@null"
+                        android:gravity="center"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/bar_icon" />
+
+                    <TextView
+                        android:id="@+id/tabBar_str"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tab_bar"
+                        android:textSize="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tabMessage"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_bar"
-                    android:textColor="#b1b1b1"
-                    android:textSize="10dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tabDiscover"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/tabDiscover_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerInParent="true"
-                    android:contentDescription="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_launcher"/>
-
-                <TextView
-                    android:id="@+id/tabDiscover_str"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tab_discover"
-                    android:textColor="#b1b1b1"
-                    android:textSize="10dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tabMe"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/tabMe_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:contentDescription="@null"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_launcher"/>
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tabMe_str"
-                    android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        >
+
+                        <ImageView
+                            android:id="@+id/tabMessage_icon"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:contentDescription="@null"
+                            android:gravity="center"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/message_icon" />
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:id="@+id/new_dot"
+                            android:layout_alignTop="@id/tabMessage_icon"
+                            android:layout_alignRight="@id/tabMessage_icon"
+                            android:src="@drawable/message_left_task_statistics"
+                            />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tabMessage_str"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/tab_message"
+                        android:textSize="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tabMe"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_me"
-                    android:textColor="#b1b1b1"
-                    android:textSize="10dp" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/tabMe_icon"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:contentDescription="@null"
+                        android:gravity="center"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/me_icon" />
+
+                    <TextView
+                        android:id="@+id/tabMe_str"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tab_me"
+                        android:textSize="10dp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>
 

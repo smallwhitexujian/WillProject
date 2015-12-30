@@ -151,8 +151,7 @@ public class PullToRefreshView extends LinearLayout {
 	 * init
 	 * 
 	 * @description
-	 * @param context
-	 *            hylin 2012-7-26上午10:08:33
+	 *  hylin 2012-7-26上午10:08:33
 	 */
 	private void init() {
 		// Load all of the animations we need in code rather than through XML
@@ -184,7 +183,8 @@ public class PullToRefreshView extends LinearLayout {
 		mHeaderProgressBar = (ProgressBar) mHeaderView.findViewById(R.id.pull_to_refresh_progress);
 		String label=DateUtils.formatDateTime(context,System.currentTimeMillis(),
 	            DateUtils.FORMAT_SHOW_TIME|DateUtils.FORMAT_SHOW_DATE|DateUtils.FORMAT_ABBREV_ALL);
-		mHeaderUpdateTextView.setText("更新时间："+label);
+		mHeaderUpdateTextView.setText(context.getString(R.string.update_time) + label);
+		;
 		// header layout
 		measureView(mHeaderView);
 		mHeaderViewHeight = mHeaderView.getMeasuredHeight();

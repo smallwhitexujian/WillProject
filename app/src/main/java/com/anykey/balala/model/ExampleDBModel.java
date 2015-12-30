@@ -4,8 +4,10 @@ package com.anykey.balala.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by xujian on 15/8/27.
@@ -15,10 +17,16 @@ import java.io.Serializable;
 public class ExampleDBModel extends Model implements Serializable {
     //@Column 设置字段名，如果不设置那么默认使用:name
     //index 设置索引
-    @Column(name = "loginId")
-    public String loginId;
-    @Column(name = "Name")
-    public String name;
+    @Column(name = "username",unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    public String username;
+    @Column(name = "token")
+    public String token;
+    @Column(name = "userid")
+    public String userid;
+    @Column(name = "password")
+    public String password;
+    @Column(name = "lasttime")
+    public String lasttime;
 
     //需要默认的构造函数
     public ExampleDBModel() {
@@ -27,18 +35,28 @@ public class ExampleDBModel extends Model implements Serializable {
 
     public ExampleDBModel(String id, String name) {
         super();
-        this.name = name;
-        this.loginId = id;
+        this.username = name;
+        this.userid = id;
     }
 
     @Override
     public String toString() {
         return "ExampleDBModel{" +
-                "name='" + name + '\'' +
-                ", id='" + loginId + '\'' +
+                "name='" + username + '\'' +
+                ", id='" + userid + '\'' +
                 '}';
     }
-
+    //获取最近登陆帐号
+    public ExampleDBModel findLastAccount(){
+        List<ExampleDBModel> accounts = new Select()
+                .from(ExampleDBModel.class)
+                .orderBy("lasttime DESC")
+                .execute();
+        if(accounts == null || accounts.isEmpty()){
+            return  null;
+        }
+        return accounts.get(0);
+    }
     /**
      基本使用方法:
      保存：

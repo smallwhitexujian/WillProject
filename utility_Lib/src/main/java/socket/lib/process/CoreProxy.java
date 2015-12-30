@@ -4,63 +4,119 @@
 package socket.lib.process;
 
 
+import net.dev.mylib.DebugLogs;
+
 import socket.lib.socket.ConnectComponent;
+import socket.lib.socket.FixedPeriodHeartbeatComponent;
+import socket.lib.socket.FixedRoomHeartbeat;
 import socket.lib.socket.HeartbeatComponent;
 import socket.lib.socket.SocketManager;
 
 public class CoreProxy {
     private SocketManager mSocketManager = null;
+    private CoreProcess mCoreProcess;
+    private boolean mReconnection;
+    private ConnectComponent mConnectComponent;
 
-    public void startProcess(CoreProcess process){
-        ProcessList processList = process.getProcessList(this);
-        if(mSocketManager == null){
-            mSocketManager = new SocketManager(processList.getProtocol());
-        }
-        mSocketManager.registerCallback(processList.getBussinessCallback());
-        ConnectComponent connectComponent = new ConnectComponent();
-        connectComponent.connect(mSocketManager, processList.getConnectCallback());
+    /***
+     *   标志是否合法：
+     *     例如:标志 im 的状态,默认为false,登录成功后为true,socket断开之后为false
+     */
+    private volatile boolean mIsLegal = false;
+
+    public CoreProxy(){
+        mReconnection = true;
     }
 
-    //心跳
-    public void startProcessWithHeartbeat(CoreProcess process){
-        //心跳
+    public void startProcess(CoreProcess process){
+        this.mCoreProcess = process;
         ProcessList processList = process.getProcessList(this);
         if(mSocketManager == null){
             mSocketManager = new SocketManager(processList.getProtocol());
         }
         mSocketManager.registerCallback(processList.getBussinessCallback());
-        ConnectComponent connectComponent = new ConnectComponent();
-        connectComponent.connectWithHeartbeat(mSocketManager, processList.getConnectCallback());
-
-
+        mConnectComponent = new ConnectComponent();
+        mConnectComponent.connect(mSocketManager, processList.getConnectCallback());
     }
 
     //发送
-    public void send(byte[] data){
-        if(data == null){
-            return;
+    public boolean send(byte[] data){
+        try{
+            if(data == null || mSocketManager == null){
+                return false;
+            }
+            if(mSocketManager.getRunStatus() == SocketManager.CONNECTED){
+                return mSocketManager.write(data,0,data.length);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        if(mSocketManager == null){
-           throw new RuntimeException("socketmanager not exists");
-        }
-        if(mSocketManager.isValid()){
-            mSocketManager.write(data,0,data.length);
-        }
+        return false;
     }
-
-
 
     public void stopProcess() {
+        DebugLogs.e("jjfly ssss "+mSocketManager);
         if (mSocketManager != null) {
+            if(mConnectComponent != null){
+                mConnectComponent.disconnect();
+            }
             mSocketManager.disconnect();
         }
+        mReconnection = false;
+    }
+
+    //发心跳包
+
+    /**
+     * 心跳包发送器（可以改变心跳周期）
+     * @param heartbeatComponent 周期算法接口
+     */
+    public void doHeartbeat(HeartbeatComponent heartbeatComponent){
+      mSocketManager.doHeartbeat(heartbeatComponent);
+    }
+
+    /**
+     * 心跳恒定周期10秒
+     */
+    public void doFixedPeriodHeartbeat(){
+        FixedPeriodHeartbeatComponent heartbeatComponent = new FixedPeriodHeartbeatComponent();
+        mSocketManager.doHeartbeat(heartbeatComponent);
+    }
+
+    public void doRoomHeartbeat(){
+        FixedRoomHeartbeat heartbeatComponent = new FixedRoomHeartbeat();
+        mSocketManager.doHeartbeat(heartbeatComponent);
+    }
+
+    public boolean isReconnection() {
+        return mReconnection;
+    }
+
+    public void setReconnection(boolean reconnection) {
+        this.mReconnection = reconnection;
     }
 
 
-    //发心跳包
-    public void doHeartbeat(CoreProcess process){
-        ProcessList processList = process.getProcessList(this);
-        byte[] heartbeatParcel = processList.getProtocol().heartbeatParcel();
-        send(heartbeatParcel);
+    public boolean isLegal() {
+        return mIsLegal;
+    }
+
+    public void setIsLegal(boolean isLegal) {
+        this.mIsLegal = isLegal;
+    }
+
+
+    public int getRunStatus(){
+        if(mSocketManager != null){
+            return mSocketManager.getRunStatus();
+        }
+        return SocketManager.CONNECTNULL;
+    }
+
+    public boolean isConnectValid(){
+        if(mSocketManager == null){
+            return false;
+        }
+        return mSocketManager.isValid();
     }
 }

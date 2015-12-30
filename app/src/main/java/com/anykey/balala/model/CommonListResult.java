@@ -7,6 +7,8 @@ import java.util.List;
  */
 public class CommonListResult<T> extends CommonModel {
     public List<T> data;
+    public List<T> labledata;
+    public List<T> users;
     public boolean hasData() {
         return data != null && data.size() > 0;
     }

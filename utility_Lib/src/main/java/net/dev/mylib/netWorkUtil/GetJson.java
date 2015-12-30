@@ -1,12 +1,5 @@
 package net.dev.mylib.netWorkUtil;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Map;
-
-import net.dev.mylib.DebugLogs;
-import net.dev.mylib.ToastUtils;
-import net.dev.mylib.view.LoadingDialog;
 import android.content.Context;
 
 import com.android.volley.AuthFailureError;
@@ -15,6 +8,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import net.dev.mylib.DebugLogs;
+import net.dev.mylib.ToastUtils;
+import net.dev.mylib.view.LoadingDialog;
+
+import java.util.Map;
+
 /**
  * @author x.j 
  * volley(网络请求)
@@ -22,7 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 public class GetJson {
 	private GetJson.Callback mCallback;
 	private Context mContext;
-	
+
 	public GetJson(){
 		
 	}
@@ -67,27 +66,40 @@ public class GetJson {
 	@SuppressWarnings("rawtypes")
 	public void setConnection(int Method, String url, final Map params) {
 		url = restructureURL(Method,url,params);
-		DebugLogs.i("url is "+url);
+        DebugLogs.i("---请求地址"+url);
 		RequestManager manager = RequestManager.getInstance(mContext);// 创建管理线程池
 		StringRequest request = new StringRequest(Method, url,new Response.Listener<String>() {
 					@Override
 					public void onResponse(String response) {
 						if (mCallback != null) {
-							mCallback.onFinish(response);
-							LoadingDialog.cancelLoadingDialog();
+                            if (response != null){
+                                String isOkCode = getCode.isBooleanOk(response);
+                                if (isOkCode.equals("1000")){
+                                    mCallback.onFinish(response);
+                                }else {
+                                    if (mCallback != null) {
+                                        getCode.hasCode isCode = new getCode.hasCode();
+                                        isCode.errorCode = isOkCode;
+                                        mCallback.onError(isCode);
+                                    }
+                                }
+                                LoadingDialog.cancelLoadingDialog();
+                            }
 						}
 					}
-
 				}, new Response.ErrorListener() {
-
 					@Override
 					public void onErrorResponse(VolleyError error) {
 						if (DebugLogs.isDebug) {
 							ToastUtils.showToast(mContext, "Network error"+error.toString());
 						}
+						DebugLogs.e("=======Network error=======" + error.toString());
 						LoadingDialog.cancelLoadingDialog();
 						if (mCallback != null) {
-							mCallback.onError(error);
+							DebugLogs.e("=======Network error mCallback=======" +mCallback);
+							getCode.hasCode isCode = new getCode.hasCode();
+							isCode.errorCode = "404";
+							mCallback.onError(isCode);
 						}
 					}
 				}) {
@@ -127,8 +139,9 @@ public class GetJson {
 		}
 		String result = encodedParams.toString();
 		return result.substring(0,result.length()-1);
-}
+    }
 
-
-
+	public void setContext(Context mContext) {
+		this.mContext = mContext;
+	}
 }

@@ -8,4 +8,5 @@ import java.io.Serializable;
 public class TokenInfo implements Serializable {
     public String Userid;
     public String Token;
+
 }

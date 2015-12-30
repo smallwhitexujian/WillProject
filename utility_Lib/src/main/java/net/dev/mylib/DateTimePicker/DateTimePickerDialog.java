@@ -40,6 +40,7 @@ public class DateTimePickerDialog extends AlertDialog implements OnClickListener
 						mDate.set(Calendar.HOUR_OF_DAY, hour);
 						mDate.set(Calendar.MINUTE, minute);
 						mDate.set(Calendar.SECOND, 0);
+
 						updateTitle(mDate.getTimeInMillis());
 					}
 				});
@@ -55,22 +56,23 @@ public class DateTimePickerDialog extends AlertDialog implements OnClickListener
 		mDateTimePicker = new DateTimePicker(context,isDate);
 		setView(mDateTimePicker);
 		mDateTimePicker.setOnDateTimeChangedListener(new OnDateTimeChangedListener() {
-					@Override
-					public void onDateTimeChanged(DateTimePicker view,
-							int year, int month, int day, int hour, int minute) {
-						mDate.set(Calendar.YEAR, year);
-						mDate.set(Calendar.MONTH, month);
-						mDate.set(Calendar.DAY_OF_MONTH, day);
-						mDate.set(Calendar.HOUR_OF_DAY, hour);
-						mDate.set(Calendar.MINUTE, minute);
-						mDate.set(Calendar.SECOND, 0);
-						updateTitle(mDate.getTimeInMillis());
-					}
-				});
+			@Override
+			public void onDateTimeChanged(DateTimePicker view,
+										  int year, int month, int day, int hour, int minute) {
+				mDate.set(Calendar.YEAR, year);
+				mDate.set(Calendar.MONTH, month);
+				mDate.set(Calendar.DAY_OF_MONTH, day);
+				mDate.set(Calendar.HOUR_OF_DAY, hour);
+				mDate.set(Calendar.MINUTE, minute);
+				mDate.set(Calendar.SECOND, 0);
+				updateTitle(mDate.getTimeInMillis());
+			}
+		});
 
 		setButton("确认", this);
 //		setButton2("取消", (OnClickListener) null);
 		mDate.setTimeInMillis(date);
+
 		updateTitle(mDate.getTimeInMillis());
 	}
 	
@@ -105,6 +107,10 @@ public class DateTimePickerDialog extends AlertDialog implements OnClickListener
 	private void updateTitle(long date) {
 		int flag = DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_DATE
 				| DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_TIME;
+		setTitle(DateUtils.formatDateTime(this.getContext(), date, flag));
+	}
+	private void updateTitleNoTime(long date) {
+		int flag = DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_DATE;
 		setTitle(DateUtils.formatDateTime(this.getContext(), date, flag));
 	}
 

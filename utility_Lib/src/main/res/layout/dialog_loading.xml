@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="努力加载中..."
+        android:text="loading..."
         android:textColor="#000000"
         android:textSize="16dp"/>
 </LinearLayout>

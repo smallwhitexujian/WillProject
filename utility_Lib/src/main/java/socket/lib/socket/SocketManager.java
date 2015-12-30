@@ -1,28 +1,35 @@
 package socket.lib.socket;
 
 
-import socket.lib.protocol.Protocol;
-import socket.lib.util.ByteArrayBuffer;
-import socket.lib.util.ByteUtil;
+import net.dev.mylib.DebugLogs;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import net.dev.mylib.DebugLogs;
+import socket.lib.protocol.Protocol;
+import socket.lib.util.ByteArrayBuffer;
+import socket.lib.util.ByteUtil;
 
 /**
  * 收发包。Socket管理
  */
 public class SocketManager {
+    public static final int CONNECTNULL = -1;//原始状态
+    public static final int CONNECTLOST = -2;//丢失连接
+    public static final int CONNECTFAILD = 0;//连接失败
+    public static final int CONNECTINIT = 1;//初始化中....
+    public static final int CONNECTING = 2;//连接中
+    public static final int CONNECTED = 3;//连接成功
+
     protected InputStream mInputStream;
     protected OutputStream mOutputStream;
     protected SocketManagerCallback mSocketManagerCallback;
-    protected boolean isLostConnect = false;
-    protected boolean isCloseWhenOk = false;
+    protected boolean isLostConnect = true;
     protected Socket mSocket;
     protected SocketInfo mSocketInfo;
     protected volatile boolean mSwitch;
@@ -30,55 +37,73 @@ public class SocketManager {
     protected ExecutorService mPool = Executors.newFixedThreadPool(2);
     protected volatile boolean isValid = false;//是否连接成功
     protected Protocol mProtocol;
+    protected int mRunStatus = CONNECTNULL;
 
     protected int MAX_BORDER = 10 * 1024 * 1024;;
     protected int SLEEP_TIME = 250;
     protected HeartbeatComponent mHeartbeatComponent;
 
+    private Object lock = new Object();
+
     public SocketManager(Protocol protocol){
+        mRunStatus = CONNECTINIT;
         mProtocol = protocol;
     }
 
     public void disconnect() {
-        doneHeartbeat();//关闭心跳
-        try {
-            if (mInputStream != null) {
-                mInputStream.close();
-                mInputStream = null;
+        synchronized (lock) {
+            DebugLogs.e("jjfly disconnection =====");
+            doneHeartbeat();//关闭心跳
+            try {
+                if (mInputStream != null) {
+                    mInputStream.close();
+//                mInputStream = null;
+                }
+                if (mOutputStream != null) {
+                    mOutputStream.close();
+//                mOutputStream = null;
+                }
+                if (mSocket != null) {
+                    DebugLogs.e("jjfly  close socket");
+                    mSocket.close();
+//                mSocket = null;
+                }
+                mSwitch = false;
+                isValid = false;
+                mRunStatus = CONNECTLOST;
+            } catch (IOException e) {
+                e.printStackTrace();
+                DebugLogs.e("jjfly " + e.getMessage());
+                mRunStatus = CONNECTNULL;
             }
-            if (mOutputStream != null) {
-                mOutputStream.close();
-                mOutputStream = null;
-            }
-            if(mSocket != null){
-                mSocket.close();
-                mSocket = null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        mSwitch = false;
-        isValid = false;
     }
 
     public boolean connect(SocketInfo socketInfo) {
-        DebugLogs.e("connect:" + socketInfo);
-        if (socketInfo == null) {
+        synchronized (lock) {
+            DebugLogs.e("jjfly connect:" + socketInfo);
+            mRunStatus = CONNECTING;
+            if (socketInfo == null) {
+                mRunStatus = CONNECTFAILD;
+                return false;
+            }
+            try {
+                mSocket = new Socket();
+                mSocket.connect(new InetSocketAddress(socketInfo.host, socketInfo.port), socketInfo.timeout);
+                mSocket.setSoTimeout(socketInfo.timeout);
+                mInputStream = mSocket.getInputStream();
+                mOutputStream = mSocket.getOutputStream();
+                mSocketInfo = socketInfo;
+                DebugLogs.e("Socket Connent Sussecc");
+                isValid = true;
+                mRunStatus = CONNECTED;
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                mRunStatus = CONNECTFAILD;
+            }
             return false;
         }
-        try {
-            mSocket = new Socket(socketInfo.host, socketInfo.port);
-            mSocket.setSoTimeout(socketInfo.timeout);
-            mInputStream = mSocket.getInputStream();
-            mOutputStream = mSocket.getOutputStream();
-            mSocketInfo = socketInfo;
-            DebugLogs.e("Socket Connent Sussecc");
-            isValid = true;
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     protected void onLostConnect() {
@@ -87,11 +112,6 @@ public class SocketManager {
             mSocketManagerCallback.onLostConnect();
         }
     }
-
-    public void finishReadTask(){
-        mSwitch = false;
-    }
-
 
     public void registerCallback(SocketManagerCallback callback){
         mSocketManagerCallback = callback;
@@ -118,7 +138,7 @@ public class SocketManager {
                         while (readCount < mByteBuffer.mlen) {
                             int readNum = mInputStream.read(mByteBuffer.mbuffer, readCount, count - readCount);
                             if (readNum < 0) {
-                                DebugLogs.e("qiang ---");
+                                DebugLogs.e("jjfly ---lost connection ");
                                 mSwitch = false;
                                 isLostConnect = true;
                                 break;
@@ -139,7 +159,7 @@ public class SocketManager {
                             if (mByteBuffer.mlen == totalLen) {
                                 if (mSocketManagerCallback != null) {
                                     mSocketManagerCallback.onReceiveParcel(mByteBuffer.mbuffer);
-                                    DebugLogs.e("=====>"+ByteUtil.bytes2Hex(mByteBuffer.mbuffer));
+                                    DebugLogs.e("===收到的==>"+ByteUtil.bytes2Hex(mByteBuffer.mbuffer));
                                 }
                                 mByteBuffer = null;
                             } else {
@@ -154,18 +174,18 @@ public class SocketManager {
                                 }
                             }
                         }
-//                    } catch (Exception e){
-//                        e.printStackTrace();
-//                        continue;
-//                    }
                     }catch (IOException e){
                         DebugLogs.i("ioException");
+                        if(e instanceof java.net.SocketTimeoutException){
+                            continue;
+                        }
                         isLostConnect = true;
+                        mSwitch = false;
                         e.printStackTrace();
                     }
                 }
                 disconnect();
-                DebugLogs.i("qiang "+isLostConnect);
+                DebugLogs.i("jjfly "+isLostConnect);
                 //丢失连接业务流程回调
 
                 if (isLostConnect) {
@@ -183,32 +203,34 @@ public class SocketManager {
     }
 
 
-    public void write(final byte[] src,final int srcStart,final int len){
-//        mPool.execute(new Runnable() {
-//            @Override
-//            public void run() {
-                if (mOutputStream != null) {
-                    try {
-                        DebugLogs.i(ByteUtil.bytes2Hex(src));
-                        mOutputStream.write(src, srcStart, len);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        onLostConnect();
-                    }
-                }
-//            }
-//        });
+    public boolean write(final byte[] src,final int srcStart,final int len){
+        if (mOutputStream != null) {
+            try {
+                DebugLogs.e(ByteUtil.bytes2Hex(src));
+                mOutputStream.write(src, srcStart, len);
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                onLostConnect();
+            }
+        }
+        return false;
     }
 
     public boolean isValid(){
         return isValid;
     }
 
+    public int getRunStatus(){
+        synchronized (lock) {
+            return mRunStatus;
+        }
+    }
 
     public void writeHeartbeat(byte[] heartParcel) throws Exception {
         if (mOutputStream != null) {
             try {
-                DebugLogs.i(ByteUtil.bytes2Hex(heartParcel));
+//                DebugLogs.i(ByteUtil.bytes2Hex(heartParcel));
                 mOutputStream.write(heartParcel,0,heartParcel.length);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -220,8 +242,8 @@ public class SocketManager {
 
 
     //启动心跳
-    public void doHeartbeat(){
-        mHeartbeatComponent = new HeartbeatComponent();
+    public void doHeartbeat(HeartbeatComponent heartbeatComponent){
+        mHeartbeatComponent = heartbeatComponent;
         byte[] heartbeatParcel = mProtocol.heartbeatParcel();
         mHeartbeatComponent.doHeartbeat(this,heartbeatParcel);
     }

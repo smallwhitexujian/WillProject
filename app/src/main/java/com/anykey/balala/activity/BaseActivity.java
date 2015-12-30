@@ -1,9 +1,11 @@
 package com.anykey.balala.activity;
 
-import android.content.ComponentName;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -14,13 +16,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.anykey.balala.AppBalala;
 import com.anykey.balala.R;
 import com.anykey.balala.view.HeaderLayout;
-
-import net.dev.mylib.DebugLogs;
-import net.dev.mylib.cache.fileCheanCache.FileCache;
-import net.dev.mylib.netWorkUtil.NetWorkUtil;
-
+import com.appsflyer.AppsFlyerLib;
+import com.networkbench.agent.impl.NBSAppAgent;
+import com.tendcloud.tenddata.TCAgent;
+import com.umeng.analytics.MobclickAgent;
 /**
  * Created by xujian on 15/8/26.
  * activity基本类。保函有自定义标题栏。其中也有跳转网络设置属性
@@ -29,7 +31,6 @@ public class BaseActivity extends FragmentActivity {
     protected Context mContext;
     private View topView;
     private static final int SET_NETWORK = 0;
-
     protected HeaderLayout headerLayout;
 
     @Override
@@ -57,20 +58,13 @@ public class BaseActivity extends FragmentActivity {
     }
 
     public void setNetwork(View view) {
-        Intent intent;
-        if (android.os.Build.VERSION.SDK_INT > 10) {
-            intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+//        Intent intent;
+        if (android.os.Build.VERSION.SDK_INT > 13) {     //3.2以上打开设置界面，也可以直接用ACTION_WIRELESS_SETTINGS打开到wifi界面
+            startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
         } else {
-            intent = new Intent();
-            ComponentName component = new ComponentName("com.android.settings","com.android.settings.WirelessSettings");
-            intent.setComponent(component);
-            intent.setAction("android.intent.action.VIEW");
+            startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
         }
-        // context.startActivity(intent);
-        // Intent intent = new Intent(Settings.ACTION_SETTINGS);
-        // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // startActivity(intent);
-        startActivityForResult(intent, 0);
+
     }
 
     @Override
@@ -105,8 +99,17 @@ public class BaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = this;
-        NetWorkUtil.startNetWorkReceiver(mContext);
-        DebugLogs.e(FileCache.getMemoryInfo(mContext));
+        if (AppBalala.isDebug){
+            NBSAppAgent.setLicenseKey("95a69f84178141d7852938a9c67e1509").start(this);
+        }else{
+            NBSAppAgent.setLicenseKey("8f420af1e407467b98b698cb4fee1a63").start(this);
+        }
+    }
+
+    public void close() {
+        if (!this.isFinishing()) {
+            finish();
+        }
     }
 
     @Override
@@ -140,23 +143,6 @@ public class BaseActivity extends FragmentActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-//	protected void initActionBar() {
-//		initActionBar(null);
-//	}
-//
-//	protected void initActionBar(String title) {
-//		ActionBar actionBar = getActionBar();
-//		if (title != null) {
-//			actionBar.setTitle(title);
-//		}
-//		actionBar.setDisplayUseLogoEnabled(false);
-//		actionBar.setDisplayHomeAsUpEnabled(true);
-//	}
-//
-//	protected void initActionBar(int id) {
-//		initActionBar(HealthApp.ctx.getString(id));
-//	}
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -168,32 +154,69 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
 
-    }
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        Intent intent = new Intent();
+//        intent.setClass(this, StartActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//        finish();
+//    }
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        AppsFlyerLib.onActivityResume(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        AppsFlyerLib.onActivityPause(this);
+    }
+
 
     @Override
     protected void onPause() {
         super.onPause();
+        TCAgent.onPause(this);
+        MobclickAgent.onPause(this);
+        AppsFlyerLib.onActivityPause(this);
     }
 
     @Override
     protected void onResume() {
+        //解决系统字体大小修改布局错乱的问题
+        Resources resource = getResources();
+        Configuration c = resource.getConfiguration();
+        c.fontScale = 1.0f;
+        resource.updateConfiguration(c, resource.getDisplayMetrics());
         super.onResume();
+        TCAgent.onResume(this);
+        MobclickAgent.onResume(this);
+        AppsFlyerLib.onActivityResume(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NetWorkUtil.stopNetWorkReceiver(mContext);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancelAll();
+    }
 
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
     }
 }

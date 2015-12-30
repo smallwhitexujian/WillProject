@@ -1,16 +1,23 @@
 package net.dev.mylib;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.text.format.Time;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -18,11 +25,33 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import net.dev.mylib.cache.sharedPreferences.SharedPreferencesUtil;
+
 /**
  * @author xujian
  * 常用工具
  */
 public class Utility {
+    /**
+     * 判断是否是当天首次登陆APP
+     * @param context
+     * @return
+     */
+    public static boolean getEveryDayOpenFirst(Context context){
+        Date dt = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        long today = Long.valueOf(sdf.format(dt));
+        SharedPreferencesUtil sp = SharedPreferencesUtil.getInstance(context);
+        long recordDay = sp.getLong("recordDay", 0);
+        DebugLogs.i("today,recordDay: " + today + ", " + recordDay);
+        if (today != recordDay){
+            sp.putLong("recordDay",today);
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     /**
      * 设备唯一识别码
      * @param mcontext
@@ -31,11 +60,23 @@ public class Utility {
     public static String getUUID(Context mcontext){
         final TelephonyManager tm = (TelephonyManager)mcontext.getSystemService(Context.TELEPHONY_SERVICE);
         final String tmDevice, tmSerial, tmPhone, androidId;
-        tmDevice = "" + tm.getDeviceId();
+        tmDevice = "" + tm.getDeviceId(); //IMEI码,该操作需要在MainFest文件配置READ_PHONE_STATE权限
         tmSerial = "" + tm.getSimSerialNumber();
         androidId = "" + android.provider.Settings.Secure.getString(mcontext.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        WifiManager wm = (WifiManager)mcontext.getSystemService(Context.WIFI_SERVICE);
+        String m_WLANMAC = wm.getConnectionInfo().getMacAddress();//该操作需要在MainFest文件配置ACCESS_WIFI_STATE权限
+        //这个同一个厂商同样设备同样的rom下会重复
+        String m_DEVID = "35" + //we make this look like a valid IMEI
+                Build.BOARD.length() % 10 + Build.BRAND.length() % 10
+                + Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10
+                + Build.DISPLAY.length() % 10 + Build.HOST.length() % 10
+                + Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10
+                + Build.MODEL.length() % 10 + Build.PRODUCT.length() % 10
+                + Build.TAGS.length() % 10 + Build.TYPE.length() % 10
+                + Build.USER.length() % 10; // 13 digits
+
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        String uniqueId = Encryption.MD5(deviceUuid.toString());
+        String uniqueId = Encryption.MD5(deviceUuid.toString() + tmDevice + tmSerial + androidId + m_WLANMAC + m_DEVID);
         return  uniqueId;
     }
 
@@ -86,7 +127,23 @@ public class Utility {
 		}
 		return null;
 	}
-	
+    /**
+     * [获取应用程序build称信息]
+     *
+     * @param context
+     * @return 当前应用的版本名称
+     */
+    public static String getVersionCode(Context context){
+        try {
+            PackageInfo pinfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_CONFIGURATIONS);
+            String versionCode = String.valueOf(pinfo.versionCode);
+            return versionCode;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 	/**
 	 * 打卡软键盘
 	 * 
@@ -284,5 +341,5 @@ public class Utility {
         ViewGroup.LayoutParams params = listView.getLayoutParams();  
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));  
         listView.setLayoutParams(params);  
-    }  
+    }
 }

@@ -15,6 +15,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class HttpPostFile {
+    /**
+     *
+     * @param urlStr  上传地址
+     * @param postParams
+     * @param filesParams
+     * @return
+     */
 	public static String uploadFile(String urlStr,Map<String,String> postParams, Map<String,String> filesParams) {
 		try {
 			// 换行符

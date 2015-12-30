@@ -13,6 +13,8 @@ import android.view.Gravity;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import net.dev.mylib.DebugLogs;
 import net.dev.mylib.R;
 
 /**
@@ -29,7 +31,6 @@ public class LoadingDialog {
 	 * @param con
 	 * @param title
 	 */
-	
 	public static void showLoadingDialog(Context con, String title) {
 		if (loadingDialog != null) {
 			Window window = loadingDialog.getWindow();
@@ -85,19 +86,20 @@ public class LoadingDialog {
 	 * @param title
 	 */
 	public static void showSysLoadingDialog(Context con, String title) {
-		if (loadingDialog != null) {
-			Window window = loadingDialog.getWindow();
-			TextView dTitle = (TextView) window.findViewById(R.id.dialog_loading_title);
-			if (title != null) {
-				dTitle.setText(title);
-			}
-			return;
-		}
+		DebugLogs.e("============response==========系统load=="+String.valueOf(con));
+        if (loadingDialog != null) {
+            Window window = loadingDialog.getWindow();
+            TextView dTitle = (TextView) window.findViewById(R.id.dialog_loading_title);
+            if (title != null) {
+                dTitle.setText(title);
+            }
+            return;
+        }
 		loadingDialog = new AlertDialog.Builder(con).create();
 		loadingDialog.setCanceledOnTouchOutside(false);
 		loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));// set background was transparent
-		loadingDialog.getWindow().setDimAmount(0f);// 设置弹框遮盖层隐藏
+		loadingDialog.getWindow().setDimAmount(0.5f);// 设置弹框遮盖层隐藏
 		loadingDialog.show();
 		Window window = loadingDialog.getWindow();
 		window.setGravity(Gravity.CENTER);// 居顶显示
@@ -109,13 +111,15 @@ public class LoadingDialog {
 	}
 
 	public static void showLoadingDialog(Context con) {
-		showLoadingDialog(con, null);
+        showLoadingDialog(con, null);
 	}
 
 	public static void cancelLoadingDialog() {
-		if (loadingDialog != null) {
-			loadingDialog.dismiss();
-			loadingDialog = null;
-		}
+		try {
+			if (loadingDialog != null) {
+				loadingDialog.dismiss();
+				loadingDialog = null;
+			}
+		}catch (Exception e){}
 	}
 }

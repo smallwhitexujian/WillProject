@@ -48,9 +48,9 @@ public class ImageViewUtils {
 	 * @param image
 	 * @return
 	 */
-	private static Bitmap compressImage(Bitmap image) {  
+	public static Bitmap compressImage(Bitmap image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();  
-        image.compress(Bitmap.CompressFormat.JPEG, 90, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中  
+        image.compress(Bitmap.CompressFormat.JPEG, 70, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         int options = 100;  
         while ( baos.toByteArray().length / 1024>100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩         
             baos.reset();//重置baos即清空baos  
@@ -99,7 +99,7 @@ public class ImageViewUtils {
 	 * @param image
 	 * @return
 	 */
-	private Bitmap comp(Bitmap image) {  
+	public static Bitmap comp(Bitmap image) {
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();         
 	    image.compress(Bitmap.CompressFormat.JPEG, 100, baos);  
 	    if( baos.toByteArray().length / 1024>1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出    

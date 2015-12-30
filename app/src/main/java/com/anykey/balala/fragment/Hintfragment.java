@@ -13,6 +13,7 @@ public abstract class Hintfragment extends BaseFragment{
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+
         if (getUserVisibleHint()) {
             isVisible = true;
             onVisible();

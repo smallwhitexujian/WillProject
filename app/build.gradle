@@ -1,32 +1,55 @@
 apply plugin: 'com.android.application'
+apply plugin: 'newlens'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '23.0.0'
-
+    buildToolsVersion '22.0.1'
     defaultConfig {
         applicationId "com.anykey.balala"
-        minSdkVersion 17
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 15
+        targetSdkVersion 16
+        versionCode 29
+        versionName "1.2.258"
+        multiDexEnabled true
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    //改变指向目录
+    sourceSets {
+        main{
+            jniLibs.srcDirs = ['libs']
         }
     }
+    repositories {
+        mavenCentral()
+    }
+
+    buildTypes {
+        release {
+            zipAlignEnabled true
+            shrinkResources true
+            proguardFiles 'proguard-android.txt'
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "2048M"
+    }
+
+}
+repositories {
+    mavenCentral()
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile project(':facebook')
+//    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':utility_Lib')
-    compile files('libs/Bughd_android_sdk_v1.3.3.jar')
-    compile files('libs/bugsnag-android-3.2.6.jar')
-    compile files('libs/activeandroid-3.1-beta.jar')
-    compile 'com.android.support:support-v4:23.0.1'
-    compile 'com.android.support:support-v13:23.0.1'
+    compile project(':google_pay_lib')
+    compile project(':slidelibrary')
+    compile 'com.google.android.gms:play-services:7.8.0'
+    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile 'com.android.support:multidex:'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.facebook.android:facebook-android-sdk:4.7.0'
+    compile "com.networkbench.newlens.agent.android:nbs.newlens.agent:2.3.1"
+    compile files('libs/AF-Android-SDK-v3.3.0.jar')
+    compile files('libs/TalkingDataAnalytics_V2.0.4.jar')
+    compile files('libs/libAudio.jar')
 }

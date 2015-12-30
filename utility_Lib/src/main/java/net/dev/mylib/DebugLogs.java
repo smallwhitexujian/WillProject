@@ -1,5 +1,8 @@
 package net.dev.mylib;
 
+import android.os.Environment;
+import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,9 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
-import android.os.Environment;
-import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * Log工具，类似android.util.Log。 tag自动产生，格式:
@@ -24,7 +24,7 @@ public class DebugLogs {
     private static final boolean isSaveLog = false; // 是否把保存日志到SD卡中
     public static final String ROOT = Environment.getExternalStorageDirectory().getPath() + "/finddreams/"; // SD卡中的根目录
     private static final String PATH_LOG_INFO = ROOT + "info/";
-    public static  boolean isDebug = true;
+    public static boolean isDebug = true ;
     private DebugLogs() {
     }
 

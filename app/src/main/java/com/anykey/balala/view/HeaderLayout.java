@@ -22,7 +22,7 @@ public class HeaderLayout extends LinearLayout {
     RelativeLayout header;
     TextView titleView;
     LinearLayout leftContainer, rightContainer;
-    Button backBtn;
+    Button backBtn,submit;
     View imageViewLayout;
 
     public HeaderLayout(Context context) {
@@ -42,6 +42,7 @@ public class HeaderLayout extends LinearLayout {
         leftContainer = (LinearLayout) header.findViewById(R.id.leftContainer);
         rightContainer = (LinearLayout) header.findViewById(R.id.rightContainer);
         backBtn = (Button) header.findViewById(R.id.backBtn);
+        submit = (Button)header.findViewById(R.id.submit);
         addView(header);
     }
 
@@ -63,6 +64,7 @@ public class HeaderLayout extends LinearLayout {
 
     public void showLeftBackButton(int backTextId, OnClickListener listener) {
         backBtn.setVisibility(View.VISIBLE);
+        backBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.back,0,0,0);
         backBtn.setText(backTextId);
         if (listener == null) {
             listener = new OnClickListener() {
@@ -74,6 +76,36 @@ public class HeaderLayout extends LinearLayout {
         }
         backBtn.setOnClickListener(listener);
     }
+
+    public void showLeftBackButton(int backTextId, OnClickListener listener,boolean isback) {
+        backBtn.setVisibility(View.VISIBLE);
+        backBtn.setText(backTextId);
+        if (listener == null) {
+            listener = new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((Activity) getContext()).finish();
+                }
+            };
+        }
+        backBtn.setOnClickListener(listener);
+    }
+
+    public void showRightSubmitButton(int backTextId, OnClickListener listener) {
+        submit.setVisibility(View.VISIBLE);
+        submit.setText(backTextId);
+        if (listener == null) {
+            listener = new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((Activity) getContext()).finish();
+                }
+            };
+        }
+        submit.setOnClickListener(listener);
+    }
+
+
 
     public void showLeftImageButton(int rightResId, OnClickListener listener) {
         View imageViewLayout = mInflater.inflate(R.layout.base_common_header_right_image_btn, null, false);
